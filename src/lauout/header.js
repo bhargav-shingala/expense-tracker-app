@@ -50,7 +50,6 @@ const Header = () => {
                     onclose={() => _showTransactionForm(false)}
                 />
                 : null
-
             }
         </div>
     )

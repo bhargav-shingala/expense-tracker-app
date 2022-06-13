@@ -7,10 +7,7 @@ import { FormContext } from "../../App";
 const TransactionForm = ({ onclose }) => {
     const [form] = Form.useForm();
     const [Data, _Data] = useContext(FormContext)
-
-    const [totalAmount, _totaleAmount] = useState(0)
     const dateFormat = "DD/MM/YYYY";
-
 
     const onFinish = (values) => {
         _Data(values)
@@ -25,7 +22,6 @@ const TransactionForm = ({ onclose }) => {
         onclose()
     };
 
-
     useEffect(() => {
         const formvalue = localStorage.getItem('formData')
         const value = JSON.parse(formvalue)
@@ -35,13 +31,6 @@ const TransactionForm = ({ onclose }) => {
             date: moment(x.date)
           }
         })
-        const totalincome = value?.users?.filter(x => x.income == 'income').reduce((m, n) => {
-          return m + n.amount
-        }, 0)
-        const totalexpense = value?.users?.filter(x => x.income == 'expense').reduce((m, n) => {
-          return m + n.amount
-        }, 0)
-        _totaleAmount(totalincome - totalexpense)
         form.setFieldsValue({ users: arrayUpadat })
       }, [])
 
@@ -133,6 +122,5 @@ const TransactionForm = ({ onclose }) => {
         </Modal>
     )
 }
-
 
 export default TransactionForm

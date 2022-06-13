@@ -22,8 +22,6 @@ ChartJS.register(
     Legend
 );
 
-
-
 const Analysis = () => {
     const [Data, _Data] = useContext(FormContext)
     useEffect(() => {
@@ -31,7 +29,6 @@ const Analysis = () => {
         const value = JSON.parse(formvalue)
         _Data(value)
     }, [])
-
 
     const labels = Data?.users?.map((x) => {
         return new Date(x?.date).toLocaleDateString('en-US')

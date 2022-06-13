@@ -5,9 +5,6 @@ import { FormContext } from "../../App";
 import EditeForm from "../../component/EditeForm";
 import moment from "moment";
 
-
-
-
 const EditButton = ({ row, data, _data }) => {
     const [showModal, _showModal] = useState(false)
     const hendalDelete = () => {

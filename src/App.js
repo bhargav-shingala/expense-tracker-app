@@ -11,7 +11,6 @@ function App() {
   return (
     <FormContext.Provider value={[Data, _Data]}>
       <Navigation />
-
     </FormContext.Provider>
   );
 }
