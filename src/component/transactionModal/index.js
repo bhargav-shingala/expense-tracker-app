@@ -12,13 +12,6 @@ const TransactionForm = ({ onclose }) => {
     const onFinish = (values) => {
         _Data(values)
         localStorage.setItem('formData', JSON.stringify(values))
-        const totalincome = values.users.filter(x => x.income == 'income').reduce((m, n) => {
-            return m + n.amount
-        }, 0)
-        const totalexpense = values.users.filter(x => x.income == 'expense').reduce((m, n) => {
-            return m + n.amount
-        }, 0)
-        _totaleAmount(totalincome - totalexpense)
         onclose()
     };
 
