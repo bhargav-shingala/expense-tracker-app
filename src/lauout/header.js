@@ -14,14 +14,14 @@ const Header = () => {
         const formvalue = localStorage.getItem('formData')
         const value = JSON.parse(formvalue)
 
-        const totalincome = value?.users?.filter(x => x.types == 'income').reduce((m, n) => {
+        const totalincome = value?.filter(x => x.types == 'income').reduce((m, n) => {
             return m + n.amount
         }, 0)
-        const totalexpense = value?.users?.filter(x => x.types == 'expense').reduce((m, n) => {
+        const totalexpense = value?.filter(x => x.types == 'expense').reduce((m, n) => {
             return m + n.amount
         }, 0)
         _totaleAmount(totalincome - totalexpense)
-    }, [])
+    }, [Data])
 
     return (
         <div className="headerMain">

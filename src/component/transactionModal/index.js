@@ -8,24 +8,29 @@ const TransactionForm = ({ onclose }) => {
     const [form] = Form.useForm();
     const [Data, _Data] = useContext(FormContext)
     const dateFormat = "DD/MM/YYYY";
-
+console.log('Data :>> ', Data);
     const onFinish = (values) => {
-        _Data(values)
-        localStorage.setItem('formData', JSON.stringify(values))
+        console.log('values :>> ', values);
+        const array = [...Data , values]
+        // console.log('array :>> ', array);
+        _Data(array)
+        localStorage.setItem('formData', JSON.stringify(array))
         onclose()
     };
-
+    console.log('Data :>> ', Data);
     useEffect(() => {
         const formvalue = localStorage.getItem('formData')
         const value = JSON.parse(formvalue)
-        const arrayUpadat = value?.users?.map((x) => {
-          return {
-            ...x,
-            date: moment(x.date)
-          }
+        const arrayUpadat = value?.map((x) => {
+            return {
+                ...x,
+                date: moment(x.date)
+            }
         })
-        form.setFieldsValue({ users: arrayUpadat })
-      }, [])
+        // console.log('arrayUpadat :>> ', arrayUpadat);
+        _Data(arrayUpadat || [])
+        // form.setFieldsValue({ users: arrayUpadat })
+    }, [])
 
     return (
         <Modal
@@ -36,80 +41,63 @@ const TransactionForm = ({ onclose }) => {
             footer={null}
         >
             <Form form={form} name="Expense Tracker" onFinish={onFinish} autoComplete="off" className="IncomeFrom">
-                <Form.List name="users">
-                    {(fields, { add, remove }) => (
-                        <>
-                            <div className="btnForm">
 
-                                <Form.Item>
-                                    <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
-                                        Add
-                                    </Button>
-                                </Form.Item>
-                                <Button
-                                    onClick={form.submit}
-                                    type="dashed"
-                                >
-                                    Submit
-                                </Button>
-                            </div>
+                <div className="btnForm">
+                    <Button
+                        onClick={form.submit}
+                        type="dashed"
+                    >
+                        Submit
+                    </Button>
+                </div>
+                <Card className="formCrad">
 
-                            {fields.map(({ key, name, ...restField }) => (
-                                <Card className="formCrad">
-                                    <div style={{ width: '100%', textAlign: 'end' }}>
-                                        <DeleteFilled size={25} style={{ right: 0 }} onClick={() => remove(name)} />
-                                    </div>
-                                    <Form.Item
-                                        name={[name, 'key']}
-                                        initialValue={+new Date}
-                                        hidden
-                                    />
-                                    <Form.Item
-                                        label={'Details'}
-                                        labelCol={{ span: 5 }}
-                                        name={[name, 'details']}
-                                        rules={[{ required: true, message: 'Missing destails' }]}
-                                    >
-                                        <Input.TextArea
-                                            placeholder="please add here details"
-                                            autoSize
-                                            style={{ width: '100%' }}
-                                        />
-                                    </Form.Item>
-                                    <Form.Item
-                                        label={'types'}
-                                        name={[name, 'types']}
-                                        labelCol={{ span: 5 }}
-                                        initialValue ={'income'}
-                                    >
-                                        <Radio.Group >
-                                            <Radio value={"income"}>Income</Radio>
-                                            <Radio value={'expense'}>Expense</Radio>
-                                        </Radio.Group>
-                                    </Form.Item>
+                    <Form.Item
+                        name='key'
+                        initialValue={+new Date}
+                        hidden
+                    />
+                    <Form.Item
+                        label={'Details'}
+                        labelCol={{ span: 5 }}
+                        name='details'
+                        rules={[{ required: true, message: 'Missing destails' }]}
+                    >
+                        <Input.TextArea
+                            placeholder="please add here details"
+                            autoSize
+                            style={{ width: '100%' }}
+                        />
+                    </Form.Item>
+                    <Form.Item
+                        label={'types'}
+                        name='types'
+                        labelCol={{ span: 5 }}
+                        initialValue={'income'}
+                    >
+                        <Radio.Group >
+                            <Radio value={"income"}>Income</Radio>
+                            <Radio value={'expense'}>Expense</Radio>
+                        </Radio.Group>
+                    </Form.Item>
 
-                                    <Form.Item
-                                        label={'Amount'}
-                                        labelCol={{ span: 5 }}
-                                        name={[name, 'amount']}
-                                        rules={[{ required: true, message: 'Missing amount' }]}
-                                    >
-                                        <InputNumber prefix="$" style={{ width: '100%' }} />
-                                    </Form.Item>
-                                    <Form.Item
-                                        label={'Date'}
-                                        name={[name, 'date']}
-                                        labelCol={{ span: 5 }}
-                                        rules={[{ required: true, message: 'Missing Date' }]}
-                                    >
-                                        <DatePicker format={dateFormat} />
-                                    </Form.Item>
-                                </Card>
-                            ))}
-
-                        </>
-                    )}
-                </Form.List>
+                    <Form.Item
+                        label={'Amount'}
+                        labelCol={{ span: 5 }}
+                        name='amount'
+                        rules={[{ required: true, message: 'Missing amount' }]}
+                    >
+                        <InputNumber prefix="$" style={{ width: '100%' }} />
+                    </Form.Item>
+                    <Form.Item
+                        label={'Date'}
+                        name='date'
+                        labelCol={{ span: 5 }}
+                        rules={[{ required: true, message: 'Missing Date' }]}
+                    >
+                        <DatePicker format={dateFormat} />
+                    </Form.Item>
+                </Card>
             </Form>
         </Modal>
     )

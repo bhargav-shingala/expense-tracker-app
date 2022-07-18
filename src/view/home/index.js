@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
-import { Button, Table } from "antd";
+import { Button, message, Popconfirm, Table } from "antd";
 import { Link } from "react-router-dom";
 import { FormContext } from "../../App";
 import EditeForm from "../../component/EditeForm";
@@ -8,15 +8,28 @@ import moment from "moment";
 const EditButton = ({ row, data, _data }) => {
     const [showModal, _showModal] = useState(false)
     const hendalDelete = () => {
-        const newData = data.users.filter((item) => item.key !== row.key);
-        _data({ users: newData })
-        localStorage.setItem('formData', JSON.stringify({ users: newData }))
+        const newData = data.filter((item) => item.key !== row.key);
+        _data(newData)
+        localStorage.setItem('formData', JSON.stringify(newData))
     }
+    const cancel = (e) => {
+        console.log(e);
+        message.error('Click on No');
+    };
     return (
         <>
             <div style={{ display: 'flex', justifyContent: 'space-around' }}>
                 <Button onClick={() => _showModal(true)}>edit</Button>
                 <Button onClick={hendalDelete}>delete</Button>
+                <Popconfirm
+                    title="Are you sure to delete this task?"
+                    onConfirm={hendalDelete}
+                    onCancel={cancel}
+                    okText="Yes"
+                    cancelText="No"
+                >
+                    <a href="#">Delete</a>
+                </Popconfirm>
             </div>
             {showModal ? (
                 <EditeForm
@@ -37,13 +50,15 @@ const Home = () => {
     useEffect(() => {
         const formvalue = localStorage.getItem('formData')
         const value = JSON.parse(formvalue)
-        const arrayUpadat = value?.users?.map((x) => {
+        console.log('value :>> ', value);
+        const arrayUpadat = value?.map((x) => {
             return {
                 ...x,
                 date: moment(x.date)
             }
         })
-        _Data({ users: arrayUpadat })
+        console.log('arrayUpadat :>> ', arrayUpadat);
+        _Data(arrayUpadat)
     }, [])
 
     const columns = [
@@ -84,7 +99,7 @@ const Home = () => {
         <div style={{
             margin: 50
         }}>
-            <Table columns={columns} dataSource={Data.users} size="middle" />
+            <Table columns={columns} dataSource={Data} size="middle" />
         </div>
     )
 }
