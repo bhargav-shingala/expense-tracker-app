@@ -6,7 +6,7 @@ import {
     Link,
     Outlet
 } from "react-router-dom";
-import Header from "../lauout/header";
+import Header from "../layout/header";
 import Analysis from "../view/analysis";
 import Home from "../view/home";
 

@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { Button, message, Popconfirm, Table } from "antd";
-import { Link } from "react-router-dom";
+import { EditOutlined, DeleteOutlined} from '@ant-design/icons';
 import { FormContext } from "../../App";
-import EditeForm from "../../component/EditeForm";
+import EditForm from "../../component/EditForm";
 import moment from "moment";
 
 const EditButton = ({ row, data, _data }) => {
     const [showModal, _showModal] = useState(false)
-    const hendalDelete = () => {
+    const handleDelete = () => {
         const newData = data.filter((item) => item.key !== row.key);
         _data(newData)
         localStorage.setItem('formData', JSON.stringify(newData))
@@ -18,21 +18,26 @@ const EditButton = ({ row, data, _data }) => {
     };
     return (
         <>
-            <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-                <Button onClick={() => _showModal(true)}>edit</Button>
-                <Button onClick={hendalDelete}>delete</Button>
+            <div style={{ display: 'flex', }}>
+                <EditOutlined
+                    style={{ fontSize: '25px', color: '#08c' }}
+                    onClick={() => _showModal(true)}
+                />
                 <Popconfirm
                     title="Are you sure to delete this task?"
-                    onConfirm={hendalDelete}
+                    onConfirm={handleDelete}
+
                     onCancel={cancel}
                     okText="Yes"
                     cancelText="No"
                 >
-                    <a href="#">Delete</a>
+                    <DeleteOutlined 
+                     style={{ fontSize: '25px', color: 'red', marginLeft:20 }}
+                    />
                 </Popconfirm>
             </div>
             {showModal ? (
-                <EditeForm
+                <EditForm
                     show={showModal}
                     row={row}
                     onClose={() => _showModal(false)}
@@ -48,27 +53,29 @@ const Home = () => {
     const [Data, _Data] = useContext(FormContext)
 
     useEffect(() => {
-        const formvalue = localStorage.getItem('formData')
-        const value = JSON.parse(formvalue)
+        const formValue = localStorage.getItem('formData')
+        const value = JSON.parse(formValue)
         console.log('value :>> ', value);
-        const arrayUpadat = value?.map((x) => {
+        const arrayUpdate = value?.map((x) => {
             return {
                 ...x,
                 date: moment(x.date)
             }
         })
-        console.log('arrayUpadat :>> ', arrayUpadat);
-        _Data(arrayUpadat)
+        console.log('arrayUpdate :>> ', arrayUpdate);
+        _Data(arrayUpdate)
     }, [])
 
     const columns = [
         {
             title: 'Details',
             dataIndex: 'details',
+            width: '20%',
         },
         {
             title: "Date",
             dataIndex: "date",
+            width: '15%',
             render: (_, record) => {
                 return new Date(record.date._d).toLocaleDateString('en-US')
             }
@@ -76,15 +83,18 @@ const Home = () => {
         {
             title: 'Amount',
             dataIndex: 'amount',
+            width: '8%',
         },
         {
             title: 'types',
             dataIndex: 'types',
+            width: '10%',
         },
         {
             title: 'Action',
             dataIndex: 'Action',
             align: 'center',
+            width: '5%',
             render: (col, row) => (
                 <EditButton
                     row={row}
